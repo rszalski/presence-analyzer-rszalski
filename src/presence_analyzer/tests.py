@@ -53,6 +53,20 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         self.assertEqual(len(data), 2)
         self.assertDictEqual(data[0], {u'user_id': 10, u'name': u'User 10'})
 
+    def test_mean_time_weekday(self):
+        """
+        Test mean time weekday.
+
+        Given an existing user_id, it should return mean presence values
+        for each weekday in JSON format.
+        """
+        resp = self.client.get('api/v1/mean_time_weekday/10')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.content_type, 'application/json')
+        data = json.loads(resp.data)
+        self.assertEqual(len(data), 7)
+        self.assertListEqual(data[1:3], [[u'Tue', 30047.0], [u'Wed', 24465.0]])
+
 
 class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
     """
