@@ -4,6 +4,7 @@ Helper functions used in views.
 """
 
 import csv
+from collections import defaultdict
 from json import dumps
 from functools import wraps
 from datetime import datetime
@@ -75,6 +76,21 @@ def group_by_weekday(items):
         start = items[date]['start']
         end = items[date]['end']
         result[date.weekday()].append(interval(start, end))
+    return result
+
+
+def group_by_weekday_start_end(items):
+    """
+    Groups start and end presence entries by weekday.
+    """
+    result = {i: defaultdict(list) for i in range(7)}
+
+    for date in items:
+        start = items[date]['start']
+        end = items[date]['end']
+        result[date.weekday()]['start'].append(seconds_since_midnight(start))
+        result[date.weekday()]['end'].append(seconds_since_midnight(end))
+
     return result
 
 

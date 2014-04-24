@@ -119,6 +119,44 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         self.assertEqual(len(data), 0)
         self.assertListEqual(data, [])
 
+    def test_api_presence_start_end(self):
+        """
+        Test presence weekday start end API.
+
+        Given an existing user_id, it should return JSON data with mean
+        Start and End presence values.
+        """
+        resp = self.client.get('api/v1/presence_start_end/10')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.content_type, 'application/json')
+        data = json.loads(resp.data)
+        self.assertEqual(len(data), 7)
+        self.assertListEqual(
+            data,
+            [
+                [u'Mon', 0, 0],
+                [u'Tue', 34745.0, 64792.0],
+                [u'Wed', 33592.0, 58057.0],
+                [u'Thu', 38926.0, 62631.0],
+                [u'Fri', 0, 0],
+                [u'Sat', 0, 0],
+                [u'Sun', 0, 0],
+            ],
+        )
+
+    def test_api_presence_start_end_bad_uid(self):
+        """
+        Test presence weekday start end API when user does not exist.
+
+        Given a non-existing user_id, it should return an empty list.
+        """
+        resp = self.client.get('api/v1/presence_start_end/999')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.content_type, 'application/json')
+        data = json.loads(resp.data)
+        self.assertEqual(len(data), 0)
+        self.assertListEqual(data, [])
+
 
 class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
     """
