@@ -80,6 +80,33 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         self.assertEqual(len(data), 0)
         self.assertListEqual(data, [])
 
+    def test_presence_weekday(self):
+        """
+        Test presence weekday.
+
+        Given an existing user_id, it should return total presence values
+        for each weekday in JSON format.
+        """
+        resp = self.client.get('/api/v1/presence_weekday/10')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.content_type, 'application/json')
+        data = json.loads(resp.data)
+        self.assertEqual(len(data), 8)
+        self.assertListEqual(data[1:3], [[u'Mon', 0], [u'Tue', 30047.0]])
+
+    def test_presence_weekday_bad_uid(self):
+        """
+        Test presence weekday when user does not exist.
+
+        Given a non-existing user_id, it should return an empty list.
+        """
+        resp = self.client.get('api/v1/presence_weekday/999')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.content_type, 'application/json')
+        data = json.loads(resp.data)
+        self.assertEqual(len(data), 0)
+        self.assertListEqual(data, [])
+
 
 class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
     """
