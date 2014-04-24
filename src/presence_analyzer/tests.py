@@ -65,7 +65,13 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         self.assertEqual(resp.content_type, 'application/json')
         data = json.loads(resp.data)
         self.assertEqual(len(data), 7)
-        self.assertListEqual(data[1:3], [[u'Tue', 30047.0], [u'Wed', 24465.0]])
+        self.assertListEqual(
+            data[1:3],
+            [
+                [u'Tue', 30047.0],
+                [u'Wed', 24465.0],
+            ],
+        )
 
     def test_mean_time_weekday_bad_uid(self):
         """
@@ -92,7 +98,13 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         self.assertEqual(resp.content_type, 'application/json')
         data = json.loads(resp.data)
         self.assertEqual(len(data), 8)
-        self.assertListEqual(data[1:3], [[u'Mon', 0], [u'Tue', 30047.0]])
+        self.assertListEqual(
+            data[1:3],
+            [
+                [u'Mon', 0],
+                [u'Tue', 30047.0],
+            ],
+        )
 
     def test_presence_weekday_bad_uid(self):
         """
