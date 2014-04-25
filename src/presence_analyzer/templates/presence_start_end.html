@@ -27,7 +27,7 @@
                     if(selected_user) {
                         loading.show();
                         chart_div.hide();
-                        
+
                         $.getJSON('/api/v1/presence_start_end/' + selected_user, function(result) {
                             $.each(result, function(index, value) {
                                 value[1] = parseInterval(value[1]);
