@@ -144,7 +144,7 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
             ],
         )
 
-    def test_api_presence_start_end_bad_uid(self):
+    def test_api_presence_start_end_uid(self):
         """
         Test presence weekday start end API when user does not exist.
 
