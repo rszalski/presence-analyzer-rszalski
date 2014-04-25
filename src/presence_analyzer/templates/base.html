@@ -24,11 +24,22 @@
     <div id="main">
         <div id="header">
             <h1>Presence analyzer</h1>
-            
+
+            {%
+                set links = [
+                    ('presence_weekday', 'weekday', 'Presence by weekday'),
+                    ('mean_time_weekday', 'mean', 'Presence mean time'),
+                    ('presence_start_end', 'start-end', 'Presence start-end'),
+                ]
+            %}
+            {% set active_page = active_page|default('weekday') %}
+
             <ul>
-                <li id="selected"><a href="{{ url_for('choose_template', template='presence_weekday.html') }}">Presence by weekday</a></li>
-                <li><a href="{{ url_for('choose_template', template='mean_time_weekday.html') }}">Presence mean time</a></li>
-                <li><a href="{{ url_for('choose_template', template='presence_start_end.html') }}">Presence start-end</a></li>
+                {% for template_file, id, title in links %}
+                    <li{% if id == active_page %} id="selected" {% endif %}>
+                    <a href="/choose_template/{{ template_file }}.html">{{ title }}</a>
+                    </li>
+                {% endfor %}
             </ul>
         </div>
         <div id="content">
