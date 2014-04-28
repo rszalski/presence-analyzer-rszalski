@@ -39,8 +39,7 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         Test main page redirect.
         """
         resp = self.client.get('/')
-        self.assertEqual(resp.status_code, 302)
-        assert resp.headers['Location'].endswith('/presence_weekday.html')
+        self.assertEqual(resp.status_code, 200)
 
     def test_api_users(self):
         """
@@ -156,6 +155,17 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         data = json.loads(resp.data)
         self.assertEqual(len(data), 0)
         self.assertListEqual(data, [])
+
+    def test_choose_template_404_view(self):
+        """
+        Test choose_template view with a non-existing template.
+
+        Choose_template view should return 404 Not Found for a
+        non existing template.
+        """
+        resp = self.client.get('/choose_template/non-existing-template.html')
+        self.assertEqual(resp.status_code, 404)
+        self.assertEqual(resp.content_type, 'text/html')
 
 
 class PresenceAnalyzerUtilsTestCase(unittest.TestCase):

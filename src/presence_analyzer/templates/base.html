@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang=en>
+<head>
+    <meta charset=utf-8>
+    <title>Presence analyzer</title>
+    <meta name="keywords" content="" />
+    <meta name="description" content=""/>
+    <meta name="author" content="STX Next sp. z o.o."/>
+    <meta name="viewport" content="width=device-width; initial-scale=1.0">
+
+    <link href="/static/css/normalize.css" media="all" rel="stylesheet" type="text/css" />
+    <link href="/static/css/custom.css" media="all" rel="stylesheet" type="text/css" />
+
+    <script src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script src="/static/js/shared.js"></script>
+    {% block custom_js %}
+    {% endblock %}
+</head>
+
+<body>
+    <div id="main">
+        <div id="header">
+            <h1>Presence analyzer</h1>
+
+            {%
+                set links = [
+                    ('presence_weekday', 'weekday', 'Presence by weekday'),
+                    ('mean_time_weekday', 'mean', 'Presence mean time'),
+                    ('presence_start_end', 'start-end', 'Presence start-end'),
+                ]
+            %}
+            {% set active_page = active_page|default('weekday') %}
+
+            <ul>
+                {% for template_file, id, title in links %}
+                    <li{% if id == active_page %} id="selected" {% endif %}>
+                    <a href="/choose_template/{{ template_file }}.html">{{ title }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div id="content">
+            {% block header %}
+            {% endblock %}
+            <p>
+                <select id="user_id" style="display: none">
+                    <option value="">--</option>
+                </select>
+                <div id="chart_div" style="display: none">
+                </div>
+                <div id="loading">
+                    <img src="/static/img/loading.gif" />
+                </div>
+            </p>
+        </div>
+
+    </div>
+</body>
+</html>
