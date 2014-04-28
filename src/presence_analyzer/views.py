@@ -40,9 +40,7 @@ def users_view():
     """
     Users listing for dropdown.
     """
-    data = utils.get_data()
-    return [{'user_id': i, 'name': 'User {0}'.format(str(i))}
-            for i in data.keys()]
+    return utils.parse_users_xml()
 
 
 @app.route('/api/v1/mean_time_weekday/<int:user_id>', methods=['GET'])
