@@ -4,7 +4,8 @@ Defines views.
 """
 
 import calendar
-from flask import render_template
+from flask import abort, render_template
+import jinja2
 
 from presence_analyzer.main import app
 from presence_analyzer import utils
@@ -27,7 +28,10 @@ def choose_template(template):
     Enables rendering of different templates based on url_for()
     parameters specified in the templates.
     '''
-    return render_template(template)
+    try:
+        return render_template(template)
+    except jinja2.TemplateNotFound:
+        return abort(404)
 
 
 @app.route('/api/v1/users', methods=['GET'])
