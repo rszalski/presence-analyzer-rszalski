@@ -122,7 +122,7 @@ def group_by_weekday_start_end(items):
     return result
 
 
-def seconds_since_midnight(time):
+def seconds_since_midnight(time):   # pylint: disable=W0621
     """
     Calculates amount of seconds since midnight.
     """
