@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<intranet>
+    <server>
+        <host>intranet.stxnext.pl</host>
+        <port>443</port>
+        <protocol>https</protocol>
+    </server>
+    <users>
+        <user id="141">
+            <avatar>/api/images/users/141</avatar>
+            <name>User 141</name>
+        </user>
+        <user id="170">
+            <avatar>/api/images/users/141</avatar>
+            <name>User 170</name>
+        </user>
+        <user id="176">
+            <avatar>/api/images/users/141</avatar>
+            <name>User 176</name>
+        </user>
+        <user id="26">
+            <avatar>/api/images/users/141</avatar>
+            <name>User 26</name>
+        </user>
+        <user id="165">
+            <avatar>/api/images/users/141</avatar>
+            <name>User 165</name>
+        </user>
+        <user id="19">
+            <avatar>/api/images/users/141</avatar>
+            <name>User 19</name>
+        </user>
+    </users>
+</intranet>

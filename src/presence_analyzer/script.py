@@ -5,6 +5,7 @@
 import os
 import sys
 from functools import partial
+import urllib2
 
 import paste.script.command
 import werkzeug.script
@@ -111,3 +112,23 @@ def run():
         _serve('stop', dry_run=dry_run)
 
     werkzeug.script.run()
+
+
+# bin/fetch-users
+def fetch_users():
+    """
+    Fetches the Users XML file.
+    """
+    # Access config
+    # TODO Use a logger
+    # TODO Find a way to pass the values from buildout directly
+    app = make_app(config=DEPLOY_CFG)
+    xml_url = app.config['USERS_XML_URL']
+    xml_path = app.config['USERS_XML']
+    print('Fetching users XML from {} ...'.format(xml_url))
+
+    xml_data = urllib2.urlopen(xml_url)
+    print('Writing users XML to {} ...'.format(xml_path))
+
+    with open(xml_path, 'w') as f:
+        f.write(xml_data.read())

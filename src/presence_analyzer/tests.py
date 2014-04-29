@@ -14,6 +14,10 @@ TEST_DATA_CSV = os.path.join(
     os.path.dirname(__file__), '..', '..', 'runtime', 'data', 'test_data.csv'
 )
 
+TEST_USERS_XML = os.path.join(
+    os.path.dirname(__file__), '..', '..', 'runtime', 'data', 'test_users.xml'
+)
+
 
 # pylint: disable=E1103
 class PresenceAnalyzerViewsTestCase(unittest.TestCase):
@@ -25,7 +29,7 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         """
         Before each test, set up a environment.
         """
-        main.app.config.update({'DATA_CSV': TEST_DATA_CSV})
+        main.app.config['DATA_CSV'] = TEST_DATA_CSV
         self.client = main.app.test_client()
 
     def tearDown(self):
@@ -49,8 +53,15 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.content_type, 'application/json')
         data = json.loads(resp.data)
-        self.assertEqual(len(data), 2)
-        self.assertDictEqual(data[0], {u'user_id': 10, u'name': u'User 10'})
+        self.assertEqual(len(data), 6)
+        self.assertDictEqual(
+            data[0],
+            {
+                u'user_id': 141,
+                u'name': u'User 141',
+                u'avatar': u'/api/images/users/141',
+            },
+        )
 
     def test_mean_time_weekday(self):
         """
@@ -177,7 +188,8 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         """
         Before each test, set up a environment.
         """
-        main.app.config.update({'DATA_CSV': TEST_DATA_CSV})
+        main.app.config['DATA_CSV'] = TEST_DATA_CSV
+        main.app.config['USERS_XML'] = TEST_USERS_XML
 
     def tearDown(self):
         """
@@ -197,6 +209,38 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         self.assertItemsEqual(data[10][sample_date].keys(), ['start', 'end'])
         self.assertEqual(data[10][sample_date]['start'],
                          datetime.time(9, 39, 5))
+
+    def test_parse_users_xml(self):
+        """
+        Test parsing of users XML file.
+        """
+        data = utils.parse_users_xml()
+        self.assertIsInstance(data, list)
+        self.assertEqual(len(data), 6)
+        self.assertEqual(
+            data[5],
+            {
+                'user_id': 19,
+                'name': 'User 19',
+                'avatar': '/api/images/users/141',
+            },
+        )
+
+    def test_get_server_addr_xml(self):
+        """
+        Test parsing of server path.
+        """
+        data = utils.get_server_addr_xml()
+        self.assertIsInstance(data, dict)
+        self.assertEqual(len(data), 3)
+        self.assertDictEqual(
+            data,
+            {
+                'host': 'intranet.stxnext.pl',
+                'protocol': 'https',
+                'avatar_path': '/api/images/users/',
+            }
+        )
 
 
 def suite():
