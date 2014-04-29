@@ -43,7 +43,7 @@ def cache(cache_time):
     def decorator(func):
         @wraps(func)
         def inner(*args, **kwargs):
-            func_name = repr(func)
+            func_name = repr(func) + repr(args) + repr(kwargs)
 
             with __CACHE_LOCK:
                 if func_name not in __CACHE or is_cache_expired(func_name):
