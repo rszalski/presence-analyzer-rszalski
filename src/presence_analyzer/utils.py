@@ -18,9 +18,6 @@ from presence_analyzer.main import app
 import logging
 log = logging.getLogger(__name__)  # pylint: disable=C0103
 
-__CACHE = defaultdict(dict)
-__CACHE_LOCK = threading.Lock()
-
 
 def jsonify(function):
     """
@@ -37,20 +34,23 @@ def cache(cache_time):
     """
     Caches the data for ``cache_time`` seconds.
     """
+    __cache = defaultdict(dict)
+    __cache_lock = threading.Lock()
+
     def is_cache_expired(func_name):
-        return (time.time() - __CACHE[func_name]['created']) > cache_time
+        return (time.time() - __cache[func_name]['created']) > cache_time
 
     def decorator(func):
         @wraps(func)
         def inner(*args, **kwargs):
             func_name = repr(func) + repr(args) + repr(kwargs)
 
-            with __CACHE_LOCK:
-                if func_name not in __CACHE or is_cache_expired(func_name):
-                    __CACHE[func_name]['data'] = func(*args, **kwargs)
-                    __CACHE[func_name]['created'] = time.time()
+            with __cache_lock:
+                if func_name not in __cache or is_cache_expired(func_name):
+                    __cache[func_name]['data'] = func(*args, **kwargs)
+                    __cache[func_name]['created'] = time.time()
 
-                return __CACHE[func_name]['data']
+                return __cache[func_name]['data']
         return inner
     return decorator
 
