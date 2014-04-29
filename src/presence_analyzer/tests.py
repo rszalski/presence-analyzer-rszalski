@@ -54,7 +54,14 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         self.assertEqual(resp.content_type, 'application/json')
         data = json.loads(resp.data)
         self.assertEqual(len(data), 6)
-        self.assertDictEqual(data[0], {u'user_id': 141, u'name': u'User 141'})
+        self.assertDictEqual(
+            data[0],
+            {
+                u'user_id': 141,
+                u'name': u'User 141',
+                u'avatar': u'/api/images/users/141',
+            },
+        )
 
     def test_mean_time_weekday(self):
         """
@@ -205,7 +212,7 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
 
     def test_parse_users_xml(self):
         """
-        Tests parsing of users XML file.
+        Test parsing of users XML file.
         """
         data = utils.parse_users_xml()
         self.assertIsInstance(data, list)
@@ -215,7 +222,24 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
             {
                 'user_id': 19,
                 'name': 'User 19',
+                'avatar': '/api/images/users/141',
             },
+        )
+
+    def test_get_server_addr_xml(self):
+        """
+        Test parsing of server path.
+        """
+        data = utils.get_server_addr_xml()
+        self.assertIsInstance(data, dict)
+        self.assertEqual(len(data), 3)
+        self.assertDictEqual(
+            data,
+            {
+                'host': 'intranet.stxnext.pl',
+                'protocol': 'https',
+                'avatar_path': '/api/images/users/',
+            }
         )
 
 

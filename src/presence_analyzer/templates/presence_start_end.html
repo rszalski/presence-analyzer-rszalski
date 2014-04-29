@@ -42,7 +42,9 @@
                             formatter.format(data, 2);
 
                             chart_div.show();
-                            avatar.html('<img src="https://intranet.stxnext.pl/api/images/users/'+selected_user+'" />').show();
+                            $.getJSON("{{ url_for('avatars_path') }}", function(result) {
+                                avatar.html('<img src="'+result.protocol+'://'+result.host+result.avatar_path+selected_user+'" />').show();
+                            });
                             loading.hide();
                             var chart = new google.visualization.Timeline(chart_div[0]);
                             chart.draw(data, options);

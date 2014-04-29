@@ -18,7 +18,7 @@
             $('#user_id').change(function(){
                 var selected_user = $("#user_id").val();
                 var chart_div = $('#chart_div');
-                    var avatar = $('#avatar');
+                var avatar = $('#avatar');
                 if(selected_user) {
                     loading.show();
                     chart_div.hide();
@@ -37,7 +37,9 @@
                         var formatter = new google.visualization.DateFormat({pattern: 'HH:mm:ss'});
                         formatter.format(data, 1);
                         chart_div.show();
-                        avatar.html('<img src="https://intranet.stxnext.pl/api/images/users/'+selected_user+'" />').show();
+                        $.getJSON("{{ url_for('avatars_path') }}", function(result) {
+                            avatar.html('<img src="'+result.protocol+'://'+result.host+result.avatar_path+selected_user+'" />').show();
+                        });
                         loading.hide();
                         var chart = new google.visualization.ColumnChart(chart_div[0]);
                         chart.draw(data, options);

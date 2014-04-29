@@ -78,6 +78,7 @@ def parse_users_xml():
         {
             'user_id': '<id>',
             'name': '<name>',
+            'avatar': '<avatar_path>',
         },
         ...
     ]
@@ -91,11 +92,30 @@ def parse_users_xml():
         {
             'user_id': int(user.get('id')),
             'name': user.find('name').text,
+            'avatar': user.find('avatar').text,
         }
         for user in users
     ]
 
     return users_list
+
+
+def get_server_addr_xml():
+    """
+    Returns a dict with adress and protocol of server
+    where avatars are stored.
+    """
+    users_xml = app.config['USERS_XML']
+
+    with open(users_xml, 'r') as xmlfile:
+        server = etree.parse(xmlfile).find('server')
+
+    config = {
+        'host': server.find('host').text,
+        'protocol': server.find('protocol').text,
+        'avatar_path': '/api/images/users/',
+    }
+    return config
 
 
 def group_by_weekday(items):

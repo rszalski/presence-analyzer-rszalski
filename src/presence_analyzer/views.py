@@ -43,6 +43,15 @@ def users_view():
     return utils.parse_users_xml()
 
 
+@app.route('/api/v1/avatars_path', methods=['GET'])
+@utils.jsonify
+def avatars_path():
+    """
+    Returns the path to the avatars on the host.
+    """
+    return utils.get_server_addr_xml()
+
+
 @app.route('/api/v1/mean_time_weekday/<int:user_id>', methods=['GET'])
 @utils.jsonify
 def mean_time_weekday_view(user_id):
