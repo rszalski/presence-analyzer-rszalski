@@ -29,7 +29,7 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         """
         Before each test, set up a environment.
         """
-        main.app.config.update({'DATA_CSV': TEST_DATA_CSV})
+        main.app.config['DATA_CSV'] = TEST_DATA_CSV
         self.client = main.app.test_client()
 
     def tearDown(self):
@@ -181,8 +181,8 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         """
         Before each test, set up a environment.
         """
-        main.app.config.update({'DATA_CSV': TEST_DATA_CSV})
-        main.app.config.update({'USERS_XML': TEST_USERS_XML})
+        main.app.config['DATA_CSV'] = TEST_DATA_CSV
+        main.app.config['USERS_XML'] = TEST_USERS_XML
 
     def tearDown(self):
         """
