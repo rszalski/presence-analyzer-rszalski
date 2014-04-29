@@ -8,6 +8,8 @@ from collections import defaultdict
 from json import dumps
 from functools import wraps
 from datetime import datetime
+import threading
+import time
 
 from flask import Response
 from lxml import etree
@@ -29,6 +31,32 @@ def jsonify(function):
     return inner
 
 
+def cache(cache_time):
+    """
+    Caches the data for ``cache_time`` seconds.
+    """
+    __cache = defaultdict(dict)
+    __cache_lock = threading.Lock()
+
+    def is_cache_expired(func_name):
+        return (time.time() - __cache[func_name]['created']) > cache_time
+
+    def decorator(func):
+        @wraps(func)
+        def inner(*args, **kwargs):
+            func_name = repr(func) + repr(args) + repr(kwargs)
+
+            with __cache_lock:
+                if func_name not in __cache or is_cache_expired(func_name):
+                    __cache[func_name]['data'] = func(*args, **kwargs)
+                    __cache[func_name]['created'] = time.time()
+
+                return __cache[func_name]['data']
+        return inner
+    return decorator
+
+
+@cache(600)
 def get_data():
     """
     Extracts presence data from CSV file and groups it by user_id.
@@ -145,7 +173,7 @@ def group_by_weekday_start_end(items):
     return result
 
 
-def seconds_since_midnight(time):
+def seconds_since_midnight(time):   # pylint: disable=W0621
     """
     Calculates amount of seconds since midnight.
     """
